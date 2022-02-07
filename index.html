@@ -59,6 +59,10 @@
       defer
     ></script>
     <script
+      src="https://cdn.jsdelivr.net/npm/jsonpath@1.1.1/jsonpath.min.js"
+      defer
+    ></script>
+    <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.4/jsoneditor.min.js"
       integrity="sha512-XqPEV4ZPCp2ukA6CiSf3yfznfTfyXHmtuwkRwzStFNrDjQsm4SM13FBJ3eJ9joy9kLhKSuYSkjm7QYB0uHxPHg=="
       crossorigin="anonymous"
@@ -120,7 +124,13 @@
                       type="text"
                       name="resultroot"
                       id="resultroot"
-                      placeholder="resultroot"
+                      placeholder="jsonpath ($.element.child)"
+                    />
+                    <input
+                      type="text"
+                      name="topnode"
+                      id="topnode"
+                      placeholder="root typename"
                     />
                     <button
                       class="button secondary color-white"
@@ -340,9 +350,13 @@
             console.log("r", r);
             let j = editor.get();
             if (r) {
-              j = j[r];
+              j = jsonpath.query(j, r);
             }
             j = JSON.stringify(j);
+            let obj = document.getElementById("topnode").value;
+            if (obj) {
+              this.formData.object = obj;
+            }
             this.buttonLabel = "Submitting...";
             this.loading = true;
             this.message = "";
